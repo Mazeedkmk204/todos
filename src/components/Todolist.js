@@ -15,14 +15,14 @@ const Todolist = () => {
   }, []);
 
   const deleteTask = (index) => {
-    let tempList = taskList;
+    let tempList = [...taskList];
     tempList.splice(index, 1);
 
     localStorage.setItem("taskList", JSON.stringify(tempList));
     setTaskList(tempList);
     setModal(false);
   };
-
+  
   const toggle = () => {
     setModal(!modal);
   };
@@ -31,7 +31,8 @@ const Todolist = () => {
     tempList.push(taskObj);
     localStorage.setItem("taskList", JSON.stringify(tempList));
     setTaskList(tempList);
-    window.location.reload();
+    // window.location.reload();
+    toggle()
   };
 
   const updateListArray = (obj, index) => {
@@ -39,7 +40,8 @@ const Todolist = () => {
     tempList[index] = obj;
     localStorage.setItem("taskList", JSON.stringify(tempList));
     setTaskList(tempList);
-    window.location.reload();
+    // window.location.reload();
+    toggle()
   };
 
   return (
