@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CreateTask from "../modals/CreateTask";
 import Card from "./Card";
+import axios from 'axios'
 
 const Todolist = () => {
   const [modal, setModal] = useState(false);
@@ -9,6 +10,11 @@ const Todolist = () => {
   useEffect(() => {
     const storedTaskList = JSON.parse(localStorage.getItem("taskList")) || [];
     setTaskList(storedTaskList);
+    axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
+
+    // fetch('https://node-js-crud-three.vercel.app/api/crud/v1')
+    //   .then(response => response.json())
+    //   .then(json => console.log(json))
   }, []);
 
   const toggle = () => {
@@ -17,7 +23,8 @@ const Todolist = () => {
 
   const saveTask = (taskObj) => {
     const updatedTaskList = [...taskList, taskObj];
-    localStorage.setItem("taskList", JSON.stringify(updatedTaskList));
+    // localStorage.setItem("taskList", JSON.stringify(updatedTaskList));
+    console.log({updatedTaskList})
     setTaskList(updatedTaskList);
     toggle(); // Closes the modal when a new task is saved
   };

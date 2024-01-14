@@ -23,7 +23,7 @@ const CreateTaskPopup = ({ modal, toggle, save }) => {
 
     if (validateInputs()) {
       let taskObj = {
-        Name: taskName,
+        taskName: taskName,
         Description: description,
       };
 
