@@ -4,6 +4,7 @@ import axios from 'axios';
 
 const Card = ({taskObj, index, deleteTask, updateListArray}) => {
     const [modal, setModal] = useState(false);
+    
 
     const colors = [
         {
@@ -33,12 +34,11 @@ const Card = ({taskObj, index, deleteTask, updateListArray}) => {
     }
 
     const updateTask = (obj) => {
-        updateListArray(obj, index)
+        updateListArray(obj, taskObj.id)
     }
 
-    const handleDelete = (id) => {
-        axios.delete(`https://node-js-crud-three.vercel.app/api/crud/v1/${id}`).then(data=> console.log(data.data.message))
-        deleteTask(index)
+    const handleDelete = (taskObj) => {
+        deleteTask(taskObj.id)
     }
 
     return (
@@ -50,7 +50,7 @@ const Card = ({taskObj, index, deleteTask, updateListArray}) => {
 
                 <div style={{"position": "absolute", "right" : "20px", "bottom" : "20px"}}>
                     <i className = "far fa-edit icons" style={{"color" : colors[index%5].primaryColor, "cursor" : "pointer"}} onClick = {() => setModal(true)}></i>
-                    <i className="fas fa-trash-alt" style = {{"color" : colors[index%5].primaryColor, "cursor" : "pointer"}} onClick = {()=>handleDelete(taskObj.id)}></i>
+                    <i className="fas fa-trash-alt" style = {{"color" : colors[index%5].primaryColor, "cursor" : "pointer"}} onClick = {()=>handleDelete(taskObj)}></i>
                 </div>
         </div>
         <EditTask modal = {modal} toggle = {toggle} updateTask = {updateTask} taskObj = {taskObj}/>

@@ -11,10 +11,7 @@ const Todolist = () => {
     const storedTaskList = JSON.parse(localStorage.getItem("taskList")) || [];
     setTaskList(storedTaskList);
     axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
-
-    // fetch('https://node-js-crud-three.vercel.app/api/crud/v1')
-    //   .then(response => response.json())
-    //   .then(json => console.log(json))
+  
   }, []);
 
   const toggle = () => {
@@ -22,28 +19,24 @@ const Todolist = () => {
   };
 
   const saveTask = (taskObj) => {
-    const updatedTaskList = [...taskList, taskObj];
-    // localStorage.setItem("taskList", JSON.stringify(updatedTaskList));
-    console.log({updatedTaskList})
-    setTaskList(updatedTaskList);
+    console.log({taskObj})
+    axios.post('https://node-js-crud-three.vercel.app/api/crud/v1',taskObj ).then(data=>{
+      axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
+    })
     toggle(); // Closes the modal when a new task is saved
   };
 
   const deleteTask = (index) => {
-    const updatedTaskList = [...taskList];
-    updatedTaskList.splice(index, 1);
-
-    localStorage.setItem("taskList", JSON.stringify(updatedTaskList));
-    setTaskList(updatedTaskList);
+    console.log(index)
+    axios.delete(`https://node-js-crud-three.vercel.app/api/crud/v1/${index}` ).then(data=>{
+      axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
+    })
   };
 
-  const updateListArray = (obj, index) => {
-    const updatedTaskList = [...taskList];
-    updatedTaskList[index] = obj;
-
-    localStorage.setItem("taskList", JSON.stringify(updatedTaskList));
-    setTaskList(updatedTaskList);
-    
+  const updateListArray = (obj,id) => {
+    axios.put(`https://node-js-crud-three.vercel.app/api/crud/v1/${id}`,obj ).then(data=>{
+      axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
+    })
   };
 
   return (

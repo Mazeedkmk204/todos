@@ -2,33 +2,28 @@ import React, { useState, useEffect } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 
 const EditTaskPopup = ({ modal, toggle, updateTask, taskObj }) => {
-  const [taskName, setTaskName] = useState(taskObj.taskName || "");
-  const [description, setDescription] = useState(taskObj.description || "");
+  const [updateTaskName, setUpdateTaskName] = useState(taskObj.taskName);
+  const [updateDescription, setUpdateDescription] = useState(taskObj.description);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     if (name === "taskName") {
-      setTaskName(value);
+      setUpdateTaskName(value);
     } else {
-      setDescription(value);
+      setUpdateDescription(value);
     }
   };
 
   const handleUpdate = (e) => {
     e.preventDefault();
     const updatedTask = {
-      Name: taskName,
-      Description: description,
+      taskName: updateTaskName,
+      description: updateDescription,
     };
     updateTask(updatedTask);
     toggle(); // Closes the modal after updating the task
   };
-
-  useEffect(() => {
-    setTaskName(taskObj.Name || "");
-    setDescription(taskObj.Description || "");
-  }, [taskObj]);
 
   return (
     <Modal isOpen={modal} toggle={toggle} className="modal-dialog-centered">
@@ -42,7 +37,7 @@ const EditTaskPopup = ({ modal, toggle, updateTask, taskObj }) => {
                 <input
                   type="text"
                   className="form-control"
-                  value={taskName}
+                  value={updateTaskName}
                   onChange={handleChange}
                   name="taskName"
                 />
@@ -54,7 +49,7 @@ const EditTaskPopup = ({ modal, toggle, updateTask, taskObj }) => {
                 <textarea
                   rows="5"
                   className="form-control"
-                  value={description}
+                  value={updateDescription}
                   onChange={handleChange}
                   name="description"
                 ></textarea>
