@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import CreateTask from "../modals/CreateTask";
 import Card from "./Card";
 import axios from 'axios'
-
+import { useNavigate } from "react-router-dom";
 const Todolist = () => {
+  const navigate = useNavigate();
   const [modal, setModal] = useState(false);
   const [taskList, setTaskList] = useState([]);
 
   useEffect(() => {
-    const storedTaskList = JSON.parse(localStorage.getItem("taskList")) || [];
-    setTaskList(storedTaskList);
-    axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
+    // const storedTaskList = JSON.parse(localStorage.getItem("taskList")) || [];
+    // setTaskList(storedTaskList);
+    if(!localStorage.getItem('authorizationToken')) return navigate("/") 
+    axios.get('/').then(data => setTaskList(data.data.data))
   
   }, []);
 
@@ -19,32 +21,38 @@ const Todolist = () => {
   };
 
   const saveTask = (taskObj) => {
-    console.log({taskObj})
-    axios.post('https://node-js-crud-three.vercel.app/api/crud/v1',taskObj ).then(data=>{
-      axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
+    axios.post('/',taskObj ).then(data=>{
+      axios.get('/').then(data => setTaskList(data.data.data))
     })
     toggle(); // Closes the modal when a new task is saved
   };
 
   const deleteTask = (index) => {
     console.log(index)
-    axios.delete(`https://node-js-crud-three.vercel.app/api/crud/v1/${index}` ).then(data=>{
-      axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
+    axios.delete(`/${index}` ).then(data=>{
+      axios.get('/').then(data => setTaskList(data.data.data))
     })
   };
 
   const updateListArray = (obj,id) => {
-    axios.put(`https://node-js-crud-three.vercel.app/api/crud/v1/${id}`,obj ).then(data=>{
-      axios.get('https://node-js-crud-three.vercel.app/api/crud/v1').then(data => setTaskList(data.data.data))
+    axios.put(`/${id}`,obj ).then(data=>{
+      axios.get('/').then(data => setTaskList(data.data.data))
     })
   };
 
+  const logoutHandler = () =>{
+    localStorage.removeItem('authorizationToken');
+    navigate('/')
+  }
   return (
     <div className="container mt-5">
       <div className="header text-center">
         <h3>Todo-List</h3>
         <button className="btn btn-primary mt-2" onClick={toggle}>
           Create Todo
+        </button>
+        <button className="btn btn-primary mt-2" onClick={logoutHandler}>
+          Logout
         </button>
       </div>
 
