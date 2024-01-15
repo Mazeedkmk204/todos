@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import EditTask from '../modals/EditTask';
-import axios from 'axios';
 
 const Card = ({taskObj, index, deleteTask, updateListArray}) => {
     const [modal, setModal] = useState(false);
